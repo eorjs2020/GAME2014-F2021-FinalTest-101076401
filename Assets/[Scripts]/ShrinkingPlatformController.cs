@@ -12,54 +12,58 @@ public class ShrinkingPlatformController : MonoBehaviour
     public bool isActive;
     public float platformTimer;
     public float threshold;
-
+    private Vector3 orignalPos;
     private Vector3 scale;
-
+    private bool expand;
+    public float waitingTime;
     private void Start()
     {
         scale = transform.localScale;
+        orignalPos = transform.position;
+        Invoke("Floating", 1f);
+        expand = false;
     }
 
     void Update()
     {
-
         if(isActive)
         {
             Shrinking();
         }
         else
         {
-            DeShrinking();
+            if (expand)
+                Expand(expand);
+            else
+                platformTimer += Time.deltaTime;
+            if (platformTimer > waitingTime)
+            {
+                expand = true;
+                platformTimer = 0;
+            }
+            
         }
-
+        Floating();
     }
     private void Reset()
     {
         scale.x = 1;
+        transform.position = orignalPos;
     }
 
     void Shrinking()
-    {        
-        if (scale.x > 0)
-        {
-            scale.x -= Time.deltaTime;
-            transform.localScale = scale;
-        }
-        else
-        {
-            scale.x = 0;
-        }
-    }
-    void DeShrinking()
     {
-        if(scale.x < 1)
-        {
-            scale.x += Time.deltaTime;
-            transform.localScale = scale;
-        }
-        else
-        {
-            scale.x = 1;
-        }
+        var check = (scale.x > 0.1f) ? scale.x -= Time.deltaTime : scale.x = 0.01f;       
+        transform.localScale = scale;
+        expand = false;
+    }
+    void Expand(bool t)
+    {
+        var check = (scale.x < 1) ? scale.x += Time.deltaTime : scale.x = 1;        
+        transform.localScale = scale;
+    }
+    void Floating()
+    {
+        transform.position = new Vector3(transform.position.x, orignalPos.y + Mathf.PingPong(Time.time * 0.2f, 0.2f), 0.0f);
     }
 }

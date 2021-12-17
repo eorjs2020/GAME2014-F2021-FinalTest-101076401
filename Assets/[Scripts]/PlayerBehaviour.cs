@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿//  Daekeone Lee 101076401
+//  PlayerBehaviour.cs
+//  Last Update 2021-12-17
+//  add collision event for Shrinking Platform
+
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Unity.Mathematics;
@@ -286,6 +291,7 @@ public class PlayerBehaviour : MonoBehaviour
         if(other.gameObject.CompareTag("Shrinking Float Platform"))
         {
             other.gameObject.GetComponent<ShrinkingPlatformController>().isActive = true;
+            
         }
     }
 
@@ -299,6 +305,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Shrinking Float Platform"))
         {
             other.gameObject.GetComponent<ShrinkingPlatformController>().isActive = false;
+            
         }
     }
 
