@@ -1,7 +1,7 @@
 //  Daekeone Lee 101076401
 //  ShrinkingPlatformController.cs
-//  Last Update 2021-12-17
-//  Shrinking Platform Behavior
+//  Last Update 2021-12-18
+//  Player is collliding with this platform will be shrinink and colliding end it we be expand until orinial scale
 
 using System.Collections;
 using System.Collections.Generic;
@@ -16,24 +16,40 @@ public class ShrinkingPlatformController : MonoBehaviour
     private Vector3 scale;
     private bool expand;
     public float waitingTime;
+    public AudioSource audio;
+    public AudioClip[] clip;
+    private bool isShrinking = false;
     private void Start()
     {
+
         scale = transform.localScale;
         orignalPos = transform.position;
         Invoke("Floating", 1f);
         expand = false;
+        audio = GetComponent<AudioSource>();
     }
 
     void Update()
     {
+
+        if (scale.x <= 0)
+        {
+            platformTimer += Time.deltaTime;
+            if (platformTimer > waitingTime)
+            {
+                isActive = false;
+                platformTimer = 0;
+            }
+            
+        }
         if(isActive)
         {
-            Shrinking();
+            Shrinking();           
         }
         else
         {
             if (expand)
-                Expand(expand);
+                Expand();
             else
                 platformTimer += Time.deltaTime;
             if (platformTimer > waitingTime)
@@ -53,14 +69,27 @@ public class ShrinkingPlatformController : MonoBehaviour
 
     void Shrinking()
     {
-        var check = (scale.x > 0.1f) ? scale.x -= Time.deltaTime : scale.x = 0.01f;       
+        audio.clip = clip[0];
+        var check = (scale.x > 0f) ? scale.x -= Time.deltaTime : scale.x = 0;       
         transform.localScale = scale;
         expand = false;
+
+        if (!audio.isPlaying && !isShrinking)
+        {
+            audio.Play();
+            isShrinking = true;
+        }
     }
-    void Expand(bool t)
+    void Expand()
     {
+        audio.clip = clip[1];
         var check = (scale.x < 1) ? scale.x += Time.deltaTime : scale.x = 1;        
         transform.localScale = scale;
+        isShrinking = false;
+        if (!audio.isPlaying && scale.x != 1)
+        {
+            audio.Play();
+        }
     }
     void Floating()
     {

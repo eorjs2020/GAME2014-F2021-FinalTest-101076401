@@ -290,8 +290,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if(other.gameObject.CompareTag("Shrinking Float Platform"))
         {
-            other.gameObject.GetComponent<ShrinkingPlatformController>().isActive = true;
-            
+            other.gameObject.GetComponent<ShrinkingPlatformController>().isActive = true;            
         }
     }
 
@@ -318,6 +317,13 @@ public class PlayerBehaviour : MonoBehaviour
             if (Time.frameCount % 20 == 0)
             {
                 TakeDamage(1);
+            }
+        }
+        if (other.gameObject.CompareTag("Shrinking Float Platform"))
+        {
+            if(other.gameObject.transform.localScale.x == 0)
+            {
+                other.gameObject.GetComponent<ShrinkingPlatformController>().isActive = false;
             }
         }
     }
