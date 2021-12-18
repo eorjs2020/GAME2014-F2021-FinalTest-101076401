@@ -10,8 +10,7 @@ using UnityEngine;
 public class ShrinkingPlatformController : MonoBehaviour
 {
     public bool isActive;
-    public float platformTimer;
-    public float threshold;
+    public float platformTimer;    
     private Vector3 orignalPos;
     private Vector3 scale;
     private bool expand;
